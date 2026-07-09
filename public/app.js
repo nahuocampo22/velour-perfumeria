@@ -17,6 +17,28 @@ let cart = [];
 let selectedSizes = {};
 let activeFilter = "all";
 
+// ---- SUPABASE CONFIG ----
+const SUPABASE_URL = "https://meyhwakdzxbaxcgbxetd.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1leWh3YWtkenhiYXhjZ2J4ZXRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM2MjQ3NTAsImV4cCI6MjA5OTIwMDc1MH0.jFVoXHOfLhf1tWSjGqdqE3zbXplYrhnpLVheJzG_I_8";
+
+async function guardarPedidoEnSupabase(pedido) {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/Pedidos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${SUPABASE_KEY}`,
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(pedido)
+    });
+    if (!response.ok) console.error("Error guardando en Supabase:", response.status);
+  } catch (err) {
+    console.error("Error Supabase:", err);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   setupFilters();
@@ -224,13 +246,24 @@ function setupForm() {
       await Promise.all([
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, templateParams),
         emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, templateParams),
+        guardarPedidoEnSupabase({
+          nombre: templateParams.nombre,
+          apellido: templateParams.apellido,
+          email: templateParams.email,
+          telefono: templateParams.telefono,
+          direccion: templateParams.direccion,
+          items: templateParams.items,
+          total: templateParams.total,
+          pago: templateParams.pago,
+          notas: templateParams.notas,
+        }),
       ]);
       document.getElementById("orderForm").style.display = "none";
       document.getElementById("formSuccess").style.display = "block";
       cart = [];
       updateCartUI();
     } catch (err) {
-      console.error("EmailJS error:", err);
+      console.error("Error:", err);
       alert("Hubo un error al enviar el pedido. Por favor intentá de nuevo.");
     } finally {
       submitBtn.disabled = false;
