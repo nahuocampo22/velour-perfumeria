@@ -203,10 +203,8 @@ function updateCartUI() {
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const count = cart.reduce((sum, i) => sum + i.qty, 0);
 
-  // Header count
   document.getElementById("cartCount").textContent = count;
 
-  // Cart drawer
   const drawerItems = document.getElementById("cartDrawerItems");
   const drawerFooter = document.getElementById("cartDrawerFooter");
 
@@ -230,7 +228,6 @@ function updateCartUI() {
     drawerFooter.style.display = "block";
   }
 
-  // Order section summary
   const cartSummary = document.getElementById("cartSummary");
   const cartTotal = document.getElementById("cartTotal");
   const totalAmount = document.getElementById("totalAmount");
@@ -257,7 +254,6 @@ function updateCartUI() {
 }
 
 function showAddedFeedback(productId) {
-  // Visual flash on the card
   const cards = document.querySelectorAll(`.product-card[data-id="${productId}"]`);
   cards.forEach(card => {
     card.style.outline = "2px solid #b8845a";
@@ -278,8 +274,15 @@ function showCartDrawer() {
   document.getElementById("cartOverlay").classList.add("open");
 }
 
+// ---- EMAILJS CONFIG ----
+const EMAILJS_SERVICE_ID = "service_m3enz3x";
+const EMAILJS_TEMPLATE_ID = "template_gf4nyx9";
+const EMAILJS_PUBLIC_KEY = "rzd8gcXtSgB1P4hp5";
+
 // ---- ORDER FORM ----
 function setupForm() {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+
   document.getElementById("orderForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -297,38 +300,35 @@ function setupForm() {
     submitLoader.style.display = "inline";
 
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-    const orderData = {
+    const itemsTexto = cart.map(i => `${i.name} (${i.size}) x${i.qty} = $${(i.price * i.qty).toLocaleString("es-AR")}`).join("\n");
+    const pagoLabel = {
+      transferencia: "Transferencia bancaria",
+      mercadopago: "MercadoPago",
+      efectivo: "Efectivo al recibir",
+    }[document.getElementById("pago").value] || document.getElementById("pago").value;
+
+    const templateParams = {
       nombre: document.getElementById("nombre").value,
       apellido: document.getElementById("apellido").value,
       email: document.getElementById("email").value,
-      telefono: document.getElementById("telefono").value,
+      telefono: document.getElementById("telefono").value || "No ingresado",
       direccion: document.getElementById("direccion").value,
-      notas: document.getElementById("notas").value,
-      pago: document.getElementById("pago").value,
-      items: cart,
-      total,
+      notas: document.getElementById("notas").value || "Ninguna",
+      pago: pagoLabel,
+      items: itemsTexto,
+      total: "$" + total.toLocaleString("es-AR"),
       fecha: new Date().toLocaleString("es-AR", { timeZone: "America/Argentina/Buenos_Aires" }),
     };
 
     try {
-      const res = await fetch("/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        document.getElementById("orderForm").style.display = "none";
-        document.getElementById("formSuccess").style.display = "block";
-        cart = [];
-        updateCartUI();
-      } else {
-        throw new Error(data.error || "Error al enviar el pedido");
-      }
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      document.getElementById("orderForm").style.display = "none";
+      document.getElementById("formSuccess").style.display = "block";
+      cart = [];
+      updateCartUI();
     } catch (err) {
-      alert("Hubo un error al enviar el pedido: " + err.message + "\n\nAsegurate de que el servidor esté corriendo.");
+      console.error("EmailJS error:", err);
+      alert("Hubo un error al enviar el pedido. Por favor intentá de nuevo.");
     } finally {
       submitBtn.disabled = false;
       submitText.style.display = "inline";
