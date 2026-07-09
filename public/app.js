@@ -2,96 +2,21 @@
    VELOUR — Frontend App
    ============================ */
 
-// ---- PRODUCT DATA ----
 const products = [
-  {
-    id: 1,
-    name: "Noir Absolu",
-    category: "oriental",
-    categoryLabel: "Oriental",
-    desc: "Oud, cedro y almizcle. Una fragancia oscura y seductora para la noche.",
-    prices: { "30ml": 12500, "50ml": 18900, "100ml": 28500 },
-    badge: "Más vendido",
-    color: "#2d1f1a",
-  },
-  {
-    id: 2,
-    name: "Rose Éternelle",
-    category: "floral",
-    categoryLabel: "Floral",
-    desc: "Rosa búlgara, peonía y sándalo blanco. Elegancia atemporal.",
-    prices: { "30ml": 11000, "50ml": 16500, "100ml": 24000 },
-    badge: null,
-    color: "#8a4560",
-  },
-  {
-    id: 3,
-    name: "Aqua Libera",
-    category: "fresco",
-    categoryLabel: "Fresco",
-    desc: "Bergamota, menta marina y vetiver. Libertad en cada spray.",
-    prices: { "30ml": 9800, "50ml": 14500, "100ml": 21000 },
-    badge: "Nuevo",
-    color: "#1a4a6b",
-  },
-  {
-    id: 4,
-    name: "Bois Sacré",
-    category: "madero",
-    categoryLabel: "Madero",
-    desc: "Sándalo, pachulí y vainilla ahumada. Profundo y envolvente.",
-    prices: { "30ml": 13500, "50ml": 20000, "100ml": 30000 },
-    badge: null,
-    color: "#4a3020",
-  },
-  {
-    id: 5,
-    name: "Blanche Lumière",
-    category: "floral",
-    categoryLabel: "Floral",
-    desc: "Jazmín, muguet y musgo blanco. Pureza hecha perfume.",
-    prices: { "30ml": 10500, "50ml": 15800, "100ml": 23500 },
-    badge: null,
-    color: "#6a5a7a",
-  },
-  {
-    id: 6,
-    name: "Cèdre Nomade",
-    category: "madero",
-    categoryLabel: "Madero",
-    desc: "Cedro del Atlas, cuero suave y ámbar. Para el viajero eterno.",
-    prices: { "30ml": 14000, "50ml": 21000, "100ml": 32000 },
-    badge: "Exclusivo",
-    color: "#5a3a20",
-  },
-  {
-    id: 7,
-    name: "Soleil d'Été",
-    category: "fresco",
-    categoryLabel: "Fresco",
-    desc: "Limón siciliano, neroli y coco. El verano en un frasco.",
-    prices: { "30ml": 9500, "50ml": 14000, "100ml": 20500 },
-    badge: null,
-    color: "#8a7020",
-  },
-  {
-    id: 8,
-    name: "Oud Mystique",
-    category: "oriental",
-    categoryLabel: "Oriental",
-    desc: "Oud puro, rosa turca y resinas orientales. Majestuoso.",
-    prices: { "30ml": 16000, "50ml": 24000, "100ml": 36000 },
-    badge: "Premium",
-    color: "#3a1a30",
-  },
+  { id: 1, name: "Noir Absolu", category: "oriental", categoryLabel: "Oriental", desc: "Oud, cedro y almizcle. Una fragancia oscura y seductora para la noche.", prices: { "30ml": 12500, "50ml": 18900, "100ml": 28500 }, badge: "Más vendido", color: "#2d1f1a" },
+  { id: 2, name: "Rose Éternelle", category: "floral", categoryLabel: "Floral", desc: "Rosa búlgara, peonía y sándalo blanco. Elegancia atemporal.", prices: { "30ml": 11000, "50ml": 16500, "100ml": 24000 }, badge: null, color: "#8a4560" },
+  { id: 3, name: "Aqua Libera", category: "fresco", categoryLabel: "Fresco", desc: "Bergamota, menta marina y vetiver. Libertad en cada spray.", prices: { "30ml": 9800, "50ml": 14500, "100ml": 21000 }, badge: "Nuevo", color: "#1a4a6b" },
+  { id: 4, name: "Bois Sacré", category: "madero", categoryLabel: "Madero", desc: "Sándalo, pachulí y vainilla ahumada. Profundo y envolvente.", prices: { "30ml": 13500, "50ml": 20000, "100ml": 30000 }, badge: null, color: "#4a3020" },
+  { id: 5, name: "Blanche Lumière", category: "floral", categoryLabel: "Floral", desc: "Jazmín, muguet y musgo blanco. Pureza hecha perfume.", prices: { "30ml": 10500, "50ml": 15800, "100ml": 23500 }, badge: null, color: "#6a5a7a" },
+  { id: 6, name: "Cèdre Nomade", category: "madero", categoryLabel: "Madero", desc: "Cedro del Atlas, cuero suave y ámbar. Para el viajero eterno.", prices: { "30ml": 14000, "50ml": 21000, "100ml": 32000 }, badge: "Exclusivo", color: "#5a3a20" },
+  { id: 7, name: "Soleil d'Été", category: "fresco", categoryLabel: "Fresco", desc: "Limón siciliano, neroli y coco. El verano en un frasco.", prices: { "30ml": 9500, "50ml": 14000, "100ml": 20500 }, badge: null, color: "#8a7020" },
+  { id: 8, name: "Oud Mystique", category: "oriental", categoryLabel: "Oriental", desc: "Oud puro, rosa turca y resinas orientales. Majestuoso.", prices: { "30ml": 16000, "50ml": 24000, "100ml": 36000 }, badge: "Premium", color: "#3a1a30" },
 ];
 
-// ---- STATE ----
 let cart = [];
 let selectedSizes = {};
 let activeFilter = "all";
 
-// ---- INIT ----
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
   setupFilters();
@@ -99,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartUI();
 });
 
-// ---- BOTTLE SVG generator (color-aware) ----
 function bottleSVG(color) {
   return `<svg viewBox="0 0 120 220" xmlns="http://www.w3.org/2000/svg" fill="none">
     <rect x="48" y="8" width="24" height="18" rx="3" fill="${color}" opacity="0.9"/>
@@ -118,16 +42,13 @@ function bottleSVG(color) {
   </svg>`;
 }
 
-// ---- RENDER PRODUCTS ----
 function renderProducts(filter = "all") {
   const grid = document.getElementById("productsGrid");
   const filtered = filter === "all" ? products : products.filter(p => p.category === filter);
-
   grid.innerHTML = filtered.map(product => {
     const sizes = Object.keys(product.prices);
     const selectedSize = selectedSizes[product.id] || sizes[0];
     const price = product.prices[selectedSize];
-
     return `
       <div class="product-card" data-id="${product.id}">
         <div class="product-image">
@@ -139,26 +60,17 @@ function renderProducts(filter = "all") {
           <h3 class="product-name">${product.name}</h3>
           <p class="product-desc">${product.desc}</p>
           <div class="product-sizes">
-            ${sizes.map(s => `
-              <button class="size-btn ${s === selectedSize ? "active" : ""}"
-                onclick="selectSize(${product.id}, '${s}'); event.stopPropagation()">
-                ${s}
-              </button>
-            `).join("")}
+            ${sizes.map(s => `<button class="size-btn ${s === selectedSize ? "active" : ""}" onclick="selectSize(${product.id}, '${s}'); event.stopPropagation()">${s}</button>`).join("")}
           </div>
           <div class="product-footer">
             <span class="product-price">$${price.toLocaleString("es-AR")}</span>
-            <button class="btn-outline" onclick="addToCart(${product.id}); event.stopPropagation()">
-              + Agregar
-            </button>
+            <button class="btn-outline" onclick="addToCart(${product.id}); event.stopPropagation()">+ Agregar</button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join("");
 }
 
-// ---- FILTER ----
 function setupFilters() {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -170,25 +82,21 @@ function setupFilters() {
   });
 }
 
-// ---- SIZE SELECTION ----
 function selectSize(productId, size) {
   selectedSizes[productId] = size;
   renderProducts(activeFilter);
 }
 
-// ---- CART ----
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
   const size = selectedSizes[productId] || Object.keys(product.prices)[0];
   const price = product.prices[size];
-
   const existingIdx = cart.findIndex(i => i.id === productId && i.size === size);
   if (existingIdx >= 0) {
     cart[existingIdx].qty += 1;
   } else {
     cart.push({ id: productId, name: product.name, size, price, qty: 1 });
   }
-
   updateCartUI();
   showCartDrawer();
   showAddedFeedback(productId);
@@ -202,12 +110,9 @@ function removeFromCart(idx) {
 function updateCartUI() {
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const count = cart.reduce((sum, i) => sum + i.qty, 0);
-
   document.getElementById("cartCount").textContent = count;
-
   const drawerItems = document.getElementById("cartDrawerItems");
   const drawerFooter = document.getElementById("cartDrawerFooter");
-
   if (cart.length === 0) {
     drawerItems.innerHTML = '<p class="empty-cart">Tu carrito está vacío.</p>';
     drawerFooter.style.display = "none";
@@ -222,16 +127,13 @@ function updateCartUI() {
           <span class="cart-item-price">$${(item.price * item.qty).toLocaleString("es-AR")}</span>
           <button class="cart-item-remove" onclick="removeFromCart(${idx})">✕</button>
         </div>
-      </div>
-    `).join("");
+      </div>`).join("");
     document.getElementById("drawerTotal").textContent = "$" + total.toLocaleString("es-AR");
     drawerFooter.style.display = "block";
   }
-
   const cartSummary = document.getElementById("cartSummary");
   const cartTotal = document.getElementById("cartTotal");
   const totalAmount = document.getElementById("totalAmount");
-
   if (cart.length === 0) {
     cartSummary.innerHTML = '<p class="empty-cart">Tu carrito está vacío.<br/><a href="#catalogo">Explorar productos →</a></p>';
     cartTotal.style.display = "none";
@@ -246,8 +148,7 @@ function updateCartUI() {
           <span class="cart-item-price">$${(item.price * item.qty).toLocaleString("es-AR")}</span>
           <button class="cart-item-remove" onclick="removeFromCart(${idx})">✕</button>
         </div>
-      </div>
-    `).join("");
+      </div>`).join("");
     totalAmount.textContent = "$" + total.toLocaleString("es-AR");
     cartTotal.style.display = "flex";
   }
@@ -261,7 +162,6 @@ function showAddedFeedback(productId) {
   });
 }
 
-// ---- CART DRAWER TOGGLE ----
 function toggleCart() {
   const drawer = document.getElementById("cartDrawer");
   const overlay = document.getElementById("cartOverlay");
@@ -276,10 +176,10 @@ function showCartDrawer() {
 
 // ---- EMAILJS CONFIG ----
 const EMAILJS_SERVICE_ID = "service_m3enz3x";
-const EMAILJS_TEMPLATE_ID = "template_gf4nyx9";
+const EMAILJS_TEMPLATE_OWNER = "template_gf4nyx9";
+const EMAILJS_TEMPLATE_CLIENT = "template_qcw5lf8";
 const EMAILJS_PUBLIC_KEY = "rzd8gcXtSgB1P4hp5";
 
-// ---- ORDER FORM ----
 function setupForm() {
   emailjs.init(EMAILJS_PUBLIC_KEY);
 
@@ -321,7 +221,10 @@ function setupForm() {
     };
 
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      await Promise.all([
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, templateParams),
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, templateParams),
+      ]);
       document.getElementById("orderForm").style.display = "none";
       document.getElementById("formSuccess").style.display = "block";
       cart = [];
